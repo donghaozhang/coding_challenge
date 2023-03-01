@@ -9,11 +9,14 @@ The test.py file will perform the following operations
 ### Project Structure
 
     .
-    ├── ...
-    ├── test                    # Test files (alternatively `spec` or `tests`)
-    │   ├── benchmarks          # Load and stress tests
-    │   ├── integration         # End-to-end, integration tests (alternatively `e2e`)
-    │   └── unit                # Unit tests
+    ├── test.py                 #  Evaluate the performance (main file)
+    ├── runner.py               #  Model related operation such as train, test, save, load the pretrained model.
+    ├── models                  # 
+    │   └── base_model.py       #  Build the Model Class
+    ├── utils                   #  Useful functions
+    │   ├── __init__.py         #  To mark directories on disk as Python package directories
+    │   └── utils                 
+    ├── results                 #  Store Experimental Result
     └── ...
 
 ## Usage of test.py file
