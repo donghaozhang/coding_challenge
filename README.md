@@ -6,6 +6,23 @@ The test.py file will perform the following operations
 * Compute the Expected Calibration Error (ECE) and Max Calibration Error (MCE)
 * Save false positives of each class in a subfolder of ‘results/false_positives’
 * Generate the potential patterns figure of false positive
+project
+│   README.md
+│   main.py    
+│
+└───data
+│   │   data.csv
+│   │   data.txt
+│   │   ...
+│   
+└───models
+│   │   model.py
+│   │   ...
+│   
+└───utils
+│   │   helper.py
+│   │   ...
+
     .
     ├── ...
     ├── test                    # Test files (alternatively `spec` or `tests`)
