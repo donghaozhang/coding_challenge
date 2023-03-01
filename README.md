@@ -10,9 +10,6 @@ The test.py file will perform the following operations
 
 Automated tests are usually placed into the `test` or, less commonly, into the `spec` or `tests` folder.
 
-> **Q: Why tests are placed into a separate folder, as opposed to having them closer to the code under test?**
->
-> **A:** Because you don't want to test the code, you want to test the *program*.
 
     .
     ├── ...
