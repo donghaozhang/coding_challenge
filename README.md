@@ -25,7 +25,8 @@ $ python test.py --test_dir 'cifar10/test'
 Arguments to perform the model performance evulation.
 ```
 optional arguments:
-  --model            which model to use ['tiny', 'small', 'medium', 'large']
+  --test_dir         path to the test folder 
+  --model            which model to use ['tiny', 'small', 'medium', 'large'] Different ConvNext Models
   --checkpoint       the path to load saved model default="./results/checkpoints/epoch_3.pth"
   --run_train        train the model
   --train_epochs     number of epochs to train
