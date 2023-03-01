@@ -23,7 +23,7 @@ The test.py file will perform the following operations
 
 ## Example Calibration Graph
 
-![alt text]((results/calibrated_graph.png "Calibration Graph")
+![alt text](results/calibrated_graph.png "Calibration Graph")
 
 ## Dependencies
 
