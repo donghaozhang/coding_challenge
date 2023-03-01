@@ -1,4 +1,4 @@
-# coding_challenge
+# Coding Challenge
 
 ## Usage of test.py file
 $ python test.py --test_dir 'cifar10/test'
