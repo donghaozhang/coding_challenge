@@ -64,6 +64,47 @@ def build_runner(opt):
     return runner
 
 
+def compute_confusion_matrix(pred, gt, num_classes):
+    confusion_matrix = np.zeros((num_classes, num_classes))
+    for i in range(len(pred)):
+        confusion_matrix[gt[i], pred[i]] += 1
+    return confusion_matrix
+
+
+def plot_confusion_matrix(confusion_matrix, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
+    """
+    This function prints and plots the confusion matrix.
+    Normalization can be applied by setting `normalize=True`.
+    """
+    if normalize:
+        confusion_matrix = confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis]
+
+    plt.imshow(confusion_matrix, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=30)
+    plt.yticks(tick_marks, classes)
+
+    fmt = '.2f' if normalize else '0.1f'
+    thresh = confusion_matrix.max() / 2.
+    for i, j in itertools.product(range(confusion_matrix.shape[0]), range(confusion_matrix.shape[1])):
+        plt.text(j, i, format(confusion_matrix[i, j], fmt),
+                 horizontalalignment="center",
+                 color="white" if confusion_matrix[i, j] > thresh else "black")
+
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+
+    # increase the size of the plot
+    fig = plt.gcf()
+    fig.set_size_inches(8, 7)
+
+    plt.savefig('results/confusion_matrix.png')
+    plt.show()
+
+
 def main(opt):
     runner = build_runner(opt)
     if opt.checkpoint is not None:
@@ -72,7 +113,9 @@ def main(opt):
         runner.train_model(epochs=opt.train_epochs)
     print('---Perform inference on a folder of example images---')
     pred, gt, pred_probs, labels_oneh = runner.test_model()
-    print('------')
+    print('---Compute and plot the confusion matrix---')
+    cm2 = compute_confusion_matrix(pred, gt, 10)
+    plot_confusion_matrix(cm2, classes=cifar10, normalize=False)
 
 
 if __name__ == '__main__':
