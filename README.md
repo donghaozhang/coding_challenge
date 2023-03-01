@@ -32,11 +32,11 @@ optional arguments:
 ```
 
 
-## Example Confusion Matrix
+## Confusion Matrix on the Test Dataset of Cifar10
 
 ![alt text](results/confusion_matrix.png "Confusion Matrix")
 
-## Example Calibration Graph
+## Calibration Graph on the Test Dataset of Cifar10
 
 ![alt text](results/calibrated_graph.png "Calibration Graph")
 
