@@ -19,7 +19,7 @@ The test.py file will perform the following operations
 
 ## Example Confusion Matrix
 
-![alt text](results/confusion_matrix.png "neuron showcase")
+![alt text](results/confusion_matrix.png "Confusion Matrix")
 
 ## Example Calibration Graph
 
