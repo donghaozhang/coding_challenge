@@ -3,6 +3,13 @@
 ## Usage of test.py file
 $ python test.py --test_dir 'cifar10/test'
 
+Arguments to perform the Rivulet2 tracing algorithm.
+
+optional arguments:
+  --model            which model to use ['tiny', 'small', 'medium', 'large']
+  --checkpoint       the path to load saved model default="./results/checkpoints/epoch_3.pth"
+  -o OUT, --out OUT     The name of the output file
+
 The test.py file will perform the following operat
 * Perform inference on a folder of example images
 * Create and plot a confusion matrix
@@ -14,6 +21,6 @@ The test.py file will perform the following operat
 
 ![alt text](results/confusion_matrix.png "neuron showcase")
 
-## Example Lung Airway Tracing
+## Example Calibration Graph
 
-![alt text]((results/calibration_graph.png "airway showcase")
+![alt text]((results/calibration_graph.png "Calibration Graph")
