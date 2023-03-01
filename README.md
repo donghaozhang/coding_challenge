@@ -16,4 +16,4 @@ The test.py file will perform the following operat
 
 ## Example Lung Airway Tracing
 
-![alt text](meta/rivulet2_airway.png "airway showcase")
+![alt text]((results/calibration_graph.png "airway showcase")
