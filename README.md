@@ -1,5 +1,19 @@
 # Coding Challenge
 
+The test.py file will perform the following operations
+* Perform inference on a folder of example images
+* Create and plot a confusion matrix
+* Compute the Expected Calibration Error (ECE) and Max Calibration Error (MCE)
+* Save false positives of each class in a subfolder of ‘results/false_positives’
+* Generate the potential patterns figure of false positive
+    .
+    ├── ...
+    ├── test                    # Test files (alternatively `spec` or `tests`)
+    │   ├── benchmarks          # Load and stress tests
+    │   ├── integration         # End-to-end, integration tests (alternatively `e2e`)
+    │   └── unit                # Unit tests
+    └── ...
+
 ## Usage of test.py file
 $ python test.py --test_dir 'cifar10/test'
 
@@ -11,12 +25,7 @@ optional arguments:
   --run_train        train the model
   --train_epochs     number of epochs to train
 ```
-The test.py file will perform the following operations
-* Perform inference on a folder of example images
-* Create and plot a confusion matrix
-* Compute the Expected Calibration Error (ECE) and Max Calibration Error (MCE)
-* Save false positives of each class in a subfolder of ‘results/false_positives’
-* Generate the potential patterns figure of false positive
+
 
 ## Example Confusion Matrix
 
