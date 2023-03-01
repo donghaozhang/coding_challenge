@@ -6,10 +6,7 @@ The test.py file will perform the following operations
 * Compute the Expected Calibration Error (ECE) and Max Calibration Error (MCE)
 * Save false positives of each class in a subfolder of ‘results/false_positives’
 * Generate the potential patterns figure of false positive
-### Automated tests
-
-Automated tests are usually placed into the `test` or, less commonly, into the `spec` or `tests` folder.
-
+### Project Structure
 
     .
     ├── ...
