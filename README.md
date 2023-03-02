@@ -56,7 +56,11 @@ Another plans includes the following steps
 * Apply K-Means clustering to group the images into clusters based on their extracted features.
 * use t-SNE to reduce the dimensionality of feature space and plot clustered image. 
 ![alt text](results/fp_patterns.png "K-means Clustering")
-The initial assumption of the k-means clustering is that we will observe certain  
+As shown in the k-means figure above, these false positive images can be clustered using image 
+pixels or t-sne projected features. The initial assumption of the k-means clustering is that 
+we will observe certain patterns in true labels figure. And based on that, we use the pattern 
+to improve the performance of the classifier. However, there is no obvious pattern of true class 
+labels. 
 
 ## Limitation 
 The functions save_false_positives and test_model should be merged together, so the inference is only required to 
