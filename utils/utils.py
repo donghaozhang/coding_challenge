@@ -27,5 +27,7 @@ def make_project_dirs(save_dir):
     mkdir_if_missing(save_dir)
     mkdir_if_missing(os.path.join(save_dir, "checkpoints"))
     mkdir_if_missing(os.path.join(save_dir, "false_positives"))
+    mkdir_if_missing(os.path.join(save_dir, "false_positives_feature"))
     for item in cifar10:
         mkdir_if_missing(os.path.join(save_dir, "false_positives", item))
+        mkdir_if_missing(os.path.join(save_dir, "false_positives_feature", item))

@@ -12,6 +12,13 @@ from tqdm import tqdm
 cifar10 = ['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
 
+def invTrans(img):
+    return T.Normalize(
+        mean=[-0.485 / 0.229, -0.456 / 0.224, -0.406 / 0.225],
+        std=[1 / 0.229, 1 / 0.224, 1 / 0.255]
+    )(img)
+
+
 class Runner:
     def __init__(
             self,
@@ -122,6 +129,42 @@ class Runner:
         y_labels_oneh = np.array(y_labels_oneh).flatten()
         return np.array(y_pred), np.array(y_true), np.array(y_pred_probs), np.array(y_labels_oneh)
 
+    def save_false_positives_v2(self, save_wrong_images=True, save_feature=True):
+        self.model.eval()
+        y_pred = []
+        y_true = []
+        error_count = 0
+        pbar = tqdm(self.test_loader, desc='Testing')
+        with torch.no_grad():
+            for i, data in enumerate(pbar):
+                images, labels = [d.to(self.device) for d in data]
+                outputs, _ = self.predict(images)
+                y_pred.extend(outputs.data.cpu().numpy())
+                y_true.extend(labels.data.cpu().numpy())
+
+                if save_wrong_images:
+                    # save wrong images
+                    for j, (output, label) in enumerate(zip(outputs, labels)):
+                        error_count += 1
+                        if output != label:
+                            image = invTrans(images[j].data).cpu().numpy().transpose(1, 2, 0) * 255
+                            image = Image.fromarray(image.astype(np.uint8))
+                            image.save(os.path.join("results/false_positives", cifar10[output],
+                                                    f'{cifar10[label]}_{error_count}.png'))
+
+                if save_feature:
+                    for j, (output, label) in enumerate(zip(outputs, labels)):
+                        if output != label:
+                            feature = self.model.get_feature(images[j].unsqueeze(0))
+                            feature = feature.data.cpu().numpy()
+                            np.save(
+                                os.path.join("results/false_positives_feature", cifar10[output],
+                                             f'{cifar10[label]}_{error_count}.npy'),
+                                feature
+                            )
+
+        return np.array(y_pred), np.array(y_true)
+
     def predict(self, x):
         self.model.eval()
         x = x.to(self.device)
@@ -136,7 +179,7 @@ class Runner:
     def save_false_positives(self):
         class_to_label = {'airplane': 0, 'automobile': 1, 'bird': 2, 'cat': 3, 'deer': 4, 'dog': 5, 'frog': 6,
                           'horse': 7, 'ship': 8, 'truck': 9}
-
+        label_class = {v: k for k, v in class_to_label.items()}
         # load the cifar10
         # Normalize the images by the imagenet mean/std since the nets are pretrained
         transform = T.Compose([
@@ -150,18 +193,21 @@ class Runner:
             # print(class_folder)
             if not os.path.isdir(class_folder):
                 continue
+            pbar = tqdm(os.listdir(class_folder), desc=class_name)
             # Loop over the images in the class folder
-            for file_name in os.listdir(class_folder):
+            for i, file_name in enumerate(pbar):
                 image_path = os.path.join(class_folder, file_name)
                 image_ori = Image.open(image_path)
                 image = transform(image_ori)
                 image = image.to(self.device)
                 image = image.unsqueeze(0)
-                output = self.predict(image)
+                output, _ = self.predict(image)
                 output = output.cpu().detach().numpy()[0]
                 true_label = class_to_label[class_name]
                 if true_label != output:
-                    path = os.path.join('results/false_positives', cifar10[output], file_name)
+                    # print('true_label', class_name, 'prediction', label_class[output], image_path)
+                    path = os.path.join('results/false_positives', cifar10[output],
+                                        f'{class_name}_{os.path.splitext(file_name)[0]}.png')
                     image_ori.save(path)
         return None
 

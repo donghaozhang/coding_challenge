@@ -40,6 +40,10 @@ class BaseModel(nn.Module):
         x = self.classifier(x)
         return x
 
+    def get_feature(self, x):
+        x = self.backbone(x)
+        return x
+
     @staticmethod
     def compute_loss(logits, labels):
         return F.cross_entropy(logits, labels)

@@ -210,6 +210,9 @@ def main(opt):
     ECE, MCE = get_metrics(pred_probs, labels_oneh)
     print('Exact calibration error: {:.2f}%'.format(ECE * 100), 'Max Calibration Error: {:.2f}%'.format(MCE * 100))
     draw_reliability_graph(pred_probs, labels_oneh)
+    print('---Save False Positives of each class in a Subfolder---')
+    # runner.save_false_positives_v2()
+    runner.save_false_positives()
 
 
 if __name__ == '__main__':
