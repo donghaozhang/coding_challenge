@@ -54,6 +54,8 @@ Another plans includes the following steps
 * use k-means to cluster the images 
 * Apply K-Means clustering to group the images into clusters based on their extracted features.
 * use t-SNE to reduce the dimensionality of feature space and plot clustered image. 
+![alt text](results/fp_patterns.png "K-means Clustering")
+
 
 ## Limitation 
 The functions save_false_positives and test_model should be merged together, so the inference is only required to 
