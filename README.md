@@ -5,7 +5,7 @@ The test.py file will perform the following operations
 * Create and plot a confusion matrix
 * Compute the Expected Calibration Error (ECE) and Max Calibration Error (MCE)
 * Save false positives of each class in a subfolder of ‘results/false_positives’
-* Generate the potential patterns figure of false positive
+* Generate the potential patterns figure of false positive (also the analysis.py file)
 ### Project Structure
 
     .
