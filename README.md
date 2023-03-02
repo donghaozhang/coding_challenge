@@ -41,6 +41,9 @@ optional arguments:
 
 ![alt text](results/calibrated_graph.png "Calibration Graph")
 
+## Error Distributions among Different Classess
+![alt text](results/error_ratio_car.png "False Positives of Car Class")
+
 ## Dependencies
 
 The build-time and runtime dependencies of this repository are:
