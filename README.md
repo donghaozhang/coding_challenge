@@ -11,7 +11,8 @@ The test.py file will perform the following operations
     .
     ├── test.py                 #  Evaluate the performance (main file)
     ├── runner.py               #  Model related operation such as train, test, save, load the pretrained model.
-    ├── models                  # 
+    ├── analysis.py             #  Identify the potential patterns of false positive images
+    ├── models                   
     │   └── base_model.py       #  Build the Model Class
     ├── utils                   #  Useful functions
     │   ├── __init__.py         #  To mark directories on disk as Python package directories
@@ -55,7 +56,7 @@ Another plans includes the following steps
 * Apply K-Means clustering to group the images into clusters based on their extracted features.
 * use t-SNE to reduce the dimensionality of feature space and plot clustered image. 
 ![alt text](results/fp_patterns.png "K-means Clustering")
-
+The initial assumption of the k-means clustering is that we will observe certain  
 
 ## Limitation 
 The functions save_false_positives and test_model should be merged together, so the inference is only required to 
