@@ -47,10 +47,13 @@ The first pattern observed is that lots of false positive errors are caused by t
 Based on this property, we should design our network with better feature representations of
 vehicles.  Maybe enhancing the class weight for the car and truck improves the training reuslt.
 
-Another plans includes the following steps 1 collect false positives 2 extract features (pretrain model, raw pixel,
-edge detection) 2 determine the number of clusters (I set it to 10 which is equal to the number of classes)
-3 use k-means to cluster the images 4 Apply K-Means clustering to group the images into clusters based on their extracted features.
-5 use t-SNE to reduce the dimensionality of feature space and plot clustered image. 
+Another plans includes the following steps 
+* collect false positives 
+* extract features (pretrain model, raw pixel, edge detection) 
+* determine the number of clusters (I set it to 10 which is equal to the number of classes)
+* use k-means to cluster the images 
+* Apply K-Means clustering to group the images into clusters based on their extracted features.
+* use t-SNE to reduce the dimensionality of feature space and plot clustered image. 
 
 ## Limitation 
 The functions save_false_positives and test_model should be merged together, so the inference is only required to 
