@@ -217,7 +217,7 @@ def find_tp_patterns():
             image_ori = np.asarray(image_ori)
             img_list.append(image_ori)
             pred_labels.append(label)
-            true_label = file_name.split("_")[0]
+            true_label = file_name.split("_")[0] # get the ground truth label of these false positive images
             true_label = class_to_label[true_label]
             true_labels.append(true_label)
 
@@ -265,19 +265,19 @@ def main(opt):
         runner.load_model(opt.checkpoint)
     if opt.run_train:
         runner.train_model(epochs=opt.train_epochs)
-    # print('---Perform inference on a folder of example images---')
-    # pred, gt, pred_probs, labels_oneh = runner.test_model()
-    # print('---Compute and plot the confusion matrix---')
-    # cm2 = compute_confusion_matrix(pred, gt, 10)
-    # plot_confusion_matrix(cm2, classes=cifar10, normalize=False)
-    # print('---Compute the Expected Calibration Error (ECE) and Max Calibration Error (MCE)---')
-    # ECE, MCE = get_metrics(pred_probs, labels_oneh)
-    # print('Exact calibration error: {:.2f}%'.format(ECE * 100), 'Max Calibration Error: {:.2f}%'.format(MCE * 100))
-    # draw_reliability_graph(pred_probs, labels_oneh)
-    # print('---Save False Positives of each class in a Subfolder---')
-    # # runner.save_false_positives_v2()
-    # runner.save_false_positives()
-    # print('---Find the False Positive Patterns---')
+    print('---Perform inference on a folder of example images---')
+    pred, gt, pred_probs, labels_oneh = runner.test_model()
+    print('---Compute and plot the confusion matrix---')
+    cm2 = compute_confusion_matrix(pred, gt, 10)
+    plot_confusion_matrix(cm2, classes=cifar10, normalize=False)
+    print('---Compute the Expected Calibration Error (ECE) and Max Calibration Error (MCE)---')
+    ECE, MCE = get_metrics(pred_probs, labels_oneh)
+    print('Exact calibration error: {:.2f}%'.format(ECE * 100), 'Max Calibration Error: {:.2f}%'.format(MCE * 100))
+    draw_reliability_graph(pred_probs, labels_oneh)
+    print('---Save False Positives of each class in a Subfolder---')
+    # runner.save_false_positives_v2()
+    runner.save_false_positives()
+    print('---Find the False Positive Patterns---')
     find_tp_patterns()
 
 

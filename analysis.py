@@ -7,6 +7,7 @@ from sklearn.cluster import KMeans
 
 from models.base_model import BaseModel
 from utils import cifar10
+from sklearn.manifold import TSNE
 
 
 def read_all_data(dir_path):
@@ -16,12 +17,14 @@ def read_all_data(dir_path):
     :return: list of feature data
     """
     data = [[] for _ in range(10)]
+    true_labels = []
     for file in os.listdir(dir_path):
         if not file.endswith(".npy"):
             continue
         file_path = os.path.join(dir_path, file)
         cls = file.split("_")[0]
         cls_id = cifar10.index(cls)
+        print(cls_id)
         feature = np.load(file_path)[0]
         new_feature = np.zeros((feature.shape[0] + 1))
         new_feature[:feature.shape[0]] = feature

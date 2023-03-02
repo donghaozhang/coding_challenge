@@ -1,6 +1,5 @@
 
-# Dependency directories (remove the comment below to include it)
-# vendor/
+# Ignore
 results/false_positives
 models/__pycache__/
 utils/__pycache__/
