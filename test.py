@@ -1,16 +1,21 @@
 import argparse
 import itertools
+import os
+from PIL import Image
 
 import numpy as np
 import torch
 import torchvision
 import torchvision.transforms as T
 from matplotlib import pyplot as plt
+import matplotlib.patches as mpatches
+from sklearn.datasets import make_blobs
+from sklearn.manifold import TSNE
+from sklearn.cluster import KMeans
 
 from models.base_model import BaseModel
 from runner import Runner
 from utils import fix_seed, make_project_dirs, cifar10
-import matplotlib.patches as mpatches
 
 
 def parse_args():
@@ -195,24 +200,85 @@ def draw_reliability_graph(pred_probs, labels_oneh):
     plt.show()
 
 
+def find_tp_patterns():
+    class_to_label = {'airplane': 0, 'automobile': 1, 'bird': 2, 'cat': 3, 'deer': 4, 'dog': 5, 'frog': 6,
+                      'horse': 7, 'ship': 8, 'truck': 9}
+    # load images
+    im_path = 'results/false_positives'
+    pred_labels = []
+    img_list = []
+    true_labels = []
+    for label, class_name in enumerate(os.listdir(im_path)):
+        class_folder = os.path.join(im_path, class_name)
+        for file_name in os.listdir(class_folder):
+            image_path = os.path.join(class_folder, file_name)
+            image_ori = Image.open(image_path)
+            image_ori = image_ori.convert('L')  # convert image to grayscale
+            image_ori = np.asarray(image_ori)
+            img_list.append(image_ori)
+            pred_labels.append(label)
+            true_label = file_name.split("_")[0]
+            true_label = class_to_label[true_label]
+            true_labels.append(true_label)
+
+    stacked_images = np.expand_dims(img_list[0], axis=2)
+    for i in range(1, len(img_list)):
+        stacked_images = np.concatenate((stacked_images, np.expand_dims(img_list[i], axis=2)), axis=2)
+    num_images = len(img_list)
+    stacked_images = stacked_images.reshape(-1, num_images)  # (im dim1, im dim2, im_num) => (im dim1 * im dim2, im_num)
+    stacked_images = stacked_images.transpose((1, 0))
+
+    # use image pixels as features
+    kmeans_ims = KMeans(n_clusters=10)
+    kmeans_ims.fit(stacked_images)
+    y_kmeans = kmeans_ims.predict(stacked_images)
+    kmeans_ims_centers = kmeans_ims.cluster_centers_
+    print(y_kmeans)
+    # project the feature into 2 dimension using tsne
+    tsne = TSNE(n_components=2, init='random', random_state=0)
+    images_proj = tsne.fit_transform(stacked_images)
+    kmeans_proj = KMeans(n_clusters=10, random_state=0)
+    clusters = kmeans_proj.fit_predict(images_proj)
+    kmeans_proj_centers = kmeans_proj.cluster_centers_
+
+    f, axs = plt.subplots(2, 2, figsize=(10, 10), sharey=True)
+    axs[0, 0].scatter(images_proj[:, 0], images_proj[:, 1], c=y_kmeans, s=50, cmap='viridis')
+    axs[0, 0].set_title('K-means Clustering using image pixels')
+
+    axs[0, 1].scatter(images_proj[:, 0], images_proj[:, 1], c=clusters, s=50, cmap='viridis')
+    axs[0, 1].scatter(kmeans_proj_centers[:, 0], kmeans_proj_centers[:, 1], c='black', s=500, alpha=0.7)
+    axs[0, 1].set_title('K-means Clustering using t-sne projected features')
+
+    axs[1, 0].scatter(images_proj[:, 0], images_proj[:, 1], c=pred_labels, s=5, cmap='viridis')
+    axs[1, 0].set_title('CNN Predicted Classes')
+
+    axs[1, 1].scatter(images_proj[:, 0], images_proj[:, 1], c=true_labels, s=5, cmap='viridis')
+    axs[1, 1].set_title('True Class Labels')
+
+    plt.savefig('results/fp_patterns.png', bbox_inches='tight')
+    plt.show()
+
+
 def main(opt):
     runner = build_runner(opt)
     if opt.checkpoint is not None:
         runner.load_model(opt.checkpoint)
     if opt.run_train:
         runner.train_model(epochs=opt.train_epochs)
-    print('---Perform inference on a folder of example images---')
-    pred, gt, pred_probs, labels_oneh = runner.test_model()
-    print('---Compute and plot the confusion matrix---')
-    cm2 = compute_confusion_matrix(pred, gt, 10)
-    plot_confusion_matrix(cm2, classes=cifar10, normalize=False)
-    print('---Compute the Expected Calibration Error (ECE) and Max Calibration Error (MCE)---')
-    ECE, MCE = get_metrics(pred_probs, labels_oneh)
-    print('Exact calibration error: {:.2f}%'.format(ECE * 100), 'Max Calibration Error: {:.2f}%'.format(MCE * 100))
-    draw_reliability_graph(pred_probs, labels_oneh)
-    print('---Save False Positives of each class in a Subfolder---')
-    # runner.save_false_positives_v2()
-    runner.save_false_positives()
+    # print('---Perform inference on a folder of example images---')
+    # pred, gt, pred_probs, labels_oneh = runner.test_model()
+    # print('---Compute and plot the confusion matrix---')
+    # cm2 = compute_confusion_matrix(pred, gt, 10)
+    # plot_confusion_matrix(cm2, classes=cifar10, normalize=False)
+    # print('---Compute the Expected Calibration Error (ECE) and Max Calibration Error (MCE)---')
+    # ECE, MCE = get_metrics(pred_probs, labels_oneh)
+    # print('Exact calibration error: {:.2f}%'.format(ECE * 100), 'Max Calibration Error: {:.2f}%'.format(MCE * 100))
+    # draw_reliability_graph(pred_probs, labels_oneh)
+    # print('---Save False Positives of each class in a Subfolder---')
+    # # runner.save_false_positives_v2()
+    # runner.save_false_positives()
+    # print('---Find the False Positive Patterns---')
+    find_tp_patterns()
 
 
 if __name__ == '__main__':
