@@ -5,7 +5,7 @@ The test.py file will perform the following operations
 * Create and plot a confusion matrix
 * Compute the Expected Calibration Error (ECE) and Max Calibration Error (MCE)
 * Save false positives of each class in a subfolder of ‘results/false_positives’
-* Generate the potential patterns figure of false positive
+* Generate the potential patterns figure of false positive (also the analysis.py file)
 ### Project Structure
 
     .
@@ -41,14 +41,31 @@ optional arguments:
 
 ![alt text](results/calibrated_graph.png "Calibration Graph")
 
-## Error Distributions among Different Classess
+## Error Distributions among Different Classess (Find Patterns)
 ![alt text](results/error_ratio_car.png "False Positives of Car Class")
+The first pattern observed is that lots of false positive errors are caused by truck and car.
+Based on this property, we should design our network with better feature representations of
+vehicles.  Maybe enhancing the class weight for the car and truck improves the training reuslt.
+
+Another plans includes the following steps 
+* collect false positives 
+* extract features (pretrain model, raw pixel, edge detection) 
+* determine the number of clusters (I set it to 10 which is equal to the number of classes)
+* use k-means to cluster the images 
+* Apply K-Means clustering to group the images into clusters based on their extracted features.
+* use t-SNE to reduce the dimensionality of feature space and plot clustered image. 
+
+## Limitation 
+The functions save_false_positives and test_model should be merged together, so the inference is only required to 
+be computed once, which improves the efficiency. Currently, only the operation of computing confusion matrix and 
+operation of computing Expected Calibration Error (ECE) and Max Calibration Error (MCE).
+
+
 
 ## Dependencies
 
 The build-time and runtime dependencies of this repository are:
-
+* [pytorch](https://pytorch.org/)
 * [numpy](http://www.numpy.org/)
-* [scikit-fmm](https://github.com/scikit-fmm)
-* [scikit-image](https://github.com/scikit-image)
+* [scikit-learn](https://scikit-learn.org/stable/)
 * [tqdm](https://github.com/noamraph/tqdm)
