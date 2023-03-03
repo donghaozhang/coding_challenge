@@ -34,6 +34,10 @@ class BaseModel(nn.Module):
         x = self.backbone(x)
         return x
 
+    def classify(self, x):
+        x = self.classifier(x)
+        return x
+
     @staticmethod
     def compute_loss(logits, labels):
         return F.cross_entropy(logits, labels)

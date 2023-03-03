@@ -68,14 +68,14 @@ def main():
     kmeans = KMeans(n_clusters=3, random_state=0, max_iter=500).fit(all_features)
     features = [torch.Tensor(d) for d in kmeans.cluster_centers_]
 
-    # model = BaseModel()
-    # state = torch.load("./results/checkpoints/epoch_3.pth", map_location="cpu")['model']
-    # model.load_state_dict(state)
-    # model.eval()
-    # for i, feature in enumerate(features):
-    #     x = model.classify(feature.unsqueeze(0))
-    #     y_pred = (torch.max(torch.exp(x), 1)[1])
-    #     print(f"Cluster {i} center: {cifar10[y_pred.item()]}")
+    model = BaseModel()
+    state = torch.load("./results/checkpoints/epoch_3.pth", map_location="cpu")['model']
+    model.load_state_dict(state)
+    model.eval()
+    for i, feature in enumerate(features):
+        x = model.classify(feature.unsqueeze(0))
+        y_pred = (torch.max(torch.exp(x), 1)[1])
+        print(f"Cluster {i} center: {cifar10[y_pred.item()]}")
 
 
 if __name__ == '__main__':

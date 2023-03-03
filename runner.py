@@ -121,13 +121,6 @@ class Runner:
                 y_label_oneh = y_label_oneh.cpu().detach().numpy()
                 y_labels_oneh.extend(y_label_oneh)
 
-                # save wrong images
-                # for j, (output, label) in enumerate(zip(outputs, labels)):
-                #     error_count += 1
-                #     if output != label:
-                #         # print(f'Wrong image: {error_count}, label: {cifar10[label]}, output: {cifar10[output]}')
-                #         image = Image.fromarray(images[j].data.cpu().numpy().transpose(1, 2, 0).astype(np.uint8))
-                #         image.save(os.path.join("results/false_positives", cifar10[output], f'{error_count}.png'))
         y_pred_probs = np.array(y_pred_probs).flatten()
         y_labels_oneh = np.array(y_labels_oneh).flatten()
         return np.array(y_pred), np.array(y_true), np.array(y_pred_probs), np.array(y_labels_oneh)
