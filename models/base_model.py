@@ -25,16 +25,6 @@ class BaseModel(nn.Module):
         self.backbone.add_module('flatten', nn.Flatten())
         self.classifier = nn.Linear(self.linear_out, 10)
 
-        # fake model for testing
-        # self.backbone = nn.Sequential(
-        #     nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False),
-        #     nn.BatchNorm2d(64),
-        #     nn.ReLU(inplace=True),
-        #     nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
-        # )
-        # self.backbone.add_module('flatten', nn.Flatten())
-        # self.classifier = nn.Linear(64 * 32 * 32, 10)
-
     def forward(self, x):
         x = self.backbone(x)
         x = self.classifier(x)

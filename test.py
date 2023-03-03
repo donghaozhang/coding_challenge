@@ -70,6 +70,11 @@ def build_runner(opt):
 
 
 def compute_confusion_matrix(pred, gt, num_classes):
+    """
+    Compute the Confusion Matrix
+    :para Prediction of Class Labels
+    :para Ground Truth of Class Labels
+    """
     confusion_matrix = np.zeros((num_classes, num_classes))
     for i in range(len(pred)):
         confusion_matrix[gt[i], pred[i]] += 1
@@ -80,6 +85,8 @@ def plot_confusion_matrix(confusion_matrix, classes, normalize=False, title='Con
     """
     This function prints and plots the confusion matrix.
     Normalization can be applied by setting `normalize=True`.
+    :para confusion_matrix: the confusion matrix in the numpy format
+    :para classes: the number of classes
     """
     if normalize:
         confusion_matrix = confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis]
@@ -91,7 +98,7 @@ def plot_confusion_matrix(confusion_matrix, classes, normalize=False, title='Con
     plt.xticks(tick_marks, classes, rotation=30)
     plt.yticks(tick_marks, classes)
 
-    fmt = '.2f' if normalize else '0.1f'
+    fmt = '.2f' if normalize else '0.0f'
     thresh = confusion_matrix.max() / 2.
     for i, j in itertools.product(range(confusion_matrix.shape[0]), range(confusion_matrix.shape[1])):
         plt.text(j, i, format(confusion_matrix[i, j], fmt),
